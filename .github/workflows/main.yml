@@ -1,0 +1,46 @@
+name: Grade Submission (Python)
+
+on:
+  push:
+    paths:
+      - '**.csv'
+
+jobs:
+  grade:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Identify CSV
+        id: find
+        run: |
+          FILE=$(find . -name "*.csv" | head -n 1)
+          STUDENT_NAME=$(basename "$FILE" .csv | tr '_' ' ')
+          echo "CSV_FILE=$FILE" >> $GITHUB_ENV
+          echo "STUDENT_NAME=$STUDENT_NAME" >> $GITHUB_ENV
+
+      - name: Install dependencies
+        run: pip install pandas
+
+      - name: Run assessment
+        run: python scripts/assess.py
+
+      - name: Update README
+        run: python scripts/update_readme.py
+
+      - name: Commit & Push
+        env:
+          TOKEN: ${{ secrets.PAT }}
+        run: |
+          git config user.name "Auto Grader"
+          git config user.email "github-actions@github.com"
+          git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}
+          git add results.csv README.md
+          git commit -m "Grade submitted for ${{ env.STUDENT_NAME }}" || echo "No changes to commit"
+          git push
