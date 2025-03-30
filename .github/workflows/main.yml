@@ -1,4 +1,4 @@
-name: Grade Submission (Python)
+name: Grade Submission (Python with Plot)
 
 on:
   push:
@@ -26,7 +26,7 @@ jobs:
           echo "STUDENT_NAME=$STUDENT_NAME" >> $GITHUB_ENV
 
       - name: Install dependencies
-        run: pip install pandas
+        run: pip install pandas matplotlib
 
       - name: Run assessment
         run: python scripts/assess.py
@@ -41,6 +41,6 @@ jobs:
           git config user.name "Auto Grader"
           git config user.email "github-actions@github.com"
           git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}
-          git add results.csv README.md
+          git add results.csv README.md latest_result.png
           git commit -m "Grade submitted for ${{ env.STUDENT_NAME }}" || echo "No changes to commit"
           git push
