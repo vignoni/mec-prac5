@@ -12,6 +12,9 @@ table = "| Student | Performance Index | Grade |\n|---------|-------------------
 for _, row in results.iterrows():
     table += f"| {row['Student']} | {row['Index']:.4f} | {row['Grade']:.2f} |\n"
 
+table += "\n### 📈 Latest Submission Plot\n"
+table += "![Latest Result](latest_result.png)\n"
+
 new_readme = lines[:start+1] + [table] + lines[end:]
 with open("README.md", "w") as f:
     f.writelines(new_readme)
