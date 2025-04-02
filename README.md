@@ -10,6 +10,7 @@ This repo uses GitHub Actions and Python to auto-grade student submissions.
 | template student | 0.0004 | 9.99 |
 | template student | 6.7057 | 8.00 |
 | template student | 6.7057 | 8.00 |
+| template student | 6.7057 | 8.00 |
 
 ### 📈 Latest Submission Plot
 ![Latest Result](latest_result.png)
