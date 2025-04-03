@@ -20,7 +20,7 @@ jobs:
       - name: Identify CSV
         id: find
         run: |
-          FILE=$(git diff --name-only ${{ github.event.before }} ${{ github.sha }} | grep '.csv$' | tail -n 1)
+          FILE=$(find . -name "*.csv" | head -n 1)
           STUDENT_NAME=$(basename "$FILE" .csv | tr '_' ' ')
           echo "CSV_FILE=$FILE" >> $GITHUB_ENV
           echo "STUDENT_NAME=$STUDENT_NAME" >> $GITHUB_ENV
