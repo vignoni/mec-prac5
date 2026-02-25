@@ -9,7 +9,7 @@ STUDENT_NAME = os.getenv("STUDENT_NAME", "Anonymous")
 
 try:
     # Load student data
-    df = pd.read_csv(CSV_FILE)
+    df = pd.read_csv(CSV_FILE, on_bad_lines='skip')
     
     # Extracting data: Col 1=Time, Col 2=Ref, Col 3=Vel
     time = df.iloc[:, 1].values
