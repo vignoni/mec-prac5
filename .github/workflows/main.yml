@@ -1,46 +1,37 @@
-name: Grade Submission (Python with Plot)
-
+name: Mecatronics Competition Pipeline
 on:
-  push:
-    paths:
-      - '**.csv'
+  repository_dispatch:
+    types: [new_submission]
 
 jobs:
-  grade:
+  evaluate:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v4
-
-      - name: Set up Python
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+      
+      - name: Setup Python
         uses: actions/setup-python@v4
         with:
-          python-version: '3.10'
+          python-version: '3.9'
+      
+      - name: Install Dependencies
+        run: pip install pandas numpy
 
-      - name: Identify CSV
-        id: find
+      - name: Download Student Data
         run: |
-          FILE=$(find . -name "*.csv" | head -n 1)
-          STUDENT_NAME=$(basename "$FILE" .csv | tr '_' ' ')
-          echo "CSV_FILE=$FILE" >> $GITHUB_ENV
-          echo "STUDENT_NAME=$STUDENT_NAME" >> $GITHUB_ENV
+          FILE_ID="${{ github.event.client_payload.file_id }}"
+          curl -L "https://docs.google.com/uc?export=download&id=$FILE_ID" -o temp_entrega.csv
 
-      - name: Install dependencies
-        run: pip install pandas matplotlib
-
-      - name: Run assessment
+      - name: Run Assessment Script
+        env:
+          STUDENT_NAME: ${{ github.event.client_payload.student_name }}
         run: python scripts/assess.py
 
-      - name: Update README
-        run: python scripts/update_readme.py
-
-      - name: Commit & Push
-        env:
-          TOKEN: ${{ secrets.PAT }}
+      - name: Update Leaderboard and Push
         run: |
-          git config user.name "Auto Grader"
-          git config user.email "github-actions@github.com"
-          git remote set-url origin https://x-access-token:${TOKEN}@github.com/${{ github.repository }}
-          git add results.csv README.md latest_result.png
-          git commit -m "Grade submitted for ${{ env.STUDENT_NAME }}" || echo "No changes to commit"
+          git config --global user.name "MecatronicsBot"
+          git config --global user.email "bot@mecatronics.edu"
+          git add results.csv
+          git commit -m "New result: ${{ github.event.client_payload.student_name }}"
           git push
