@@ -16,7 +16,8 @@ jobs:
           python-version: '3.9'
       
       - name: Install Dependencies
-        run: pip install pandas numpy
+        # Aquí añadimos matplotlib para que no de error
+        run: pip install pandas numpy matplotlib
 
       - name: Download Student Data
         run: |
@@ -32,6 +33,6 @@ jobs:
         run: |
           git config --global user.name "MecatronicsBot"
           git config --global user.email "bot@mecatronics.edu"
-          git add results.csv
+          git add results.csv latest_plot.png
           git commit -m "New result: ${{ github.event.client_payload.student_name }}"
           git push
