@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mecatronics Leaderboard - RMSE</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-slate-900 text-white p-10">
+    <div class="max-w-5xl mx-auto">
+        <header class="text-center mb-10">
+            <h1 class="text-5xl font-extrabold text-blue-400">Mobile Robot Control Ranking</h1>
+            <p class="text-slate-400 mt-4 text-xl">Real-time RMSE Assessment (Lower is Better)</p>
+        </header>
+
+        <div class="bg-slate-800 rounded-2xl shadow-2xl overflow-hidden">
+            <table class="w-full text-left">
+                <thead class="bg-slate-700 text-slate-200">
+                    <tr>
+                        <th class="p-5">Rank</th>
+                        <th class="p-5">Student Name</th>
+                        <th class="p-5">RMSE Score</th>
+                        <th class="p-5">Grade</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard">
+                    </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        async function updateLeaderboard() {
+            try {
+                const response = await fetch('results.csv');
+                const csvText = await response.text();
+                const rows = csvText.trim().split('\n').slice(1); // Skip CSV header
+                
+                let data = rows.map(row => {
+                    const cols = row.split(',');
+                    return { 
+                        name: cols[0], 
+                        rmse: parseFloat(cols[1]), 
+                        grade: cols[2] 
+                    };
+                }).sort((a, b) => a.rmse - b.rmse); // Sort by lowest RMSE first
+
+                const container = document.getElementById('leaderboard');
+                container.innerHTML = data.map((item, index) => `
+                    <tr class="${index === 0 ? 'bg-yellow-900/20' : 'border-b border-slate-700'} hover:bg-slate-700/50 transition">
+                        <td class="p-5 font-bold text-2xl">${index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : index + 1}</td>
+                        <td class="p-5 font-semibold text-blue-300 text-lg">${item.name}</td>
+                        <td class="p-5 font-mono text-yellow-400">${item.rmse.toFixed(4)}</td>
+                        <td class="p-5 font-bold text-green-400 text-xl">${item.grade}</td>
+                    </tr>
+                `).join('');
+            } catch (error) {
+                console.error("Error loading leaderboard:", error);
+            }
+        }
+        
+        // Refresh every 15 seconds for a dynamic competition feel
+        setInterval(updateLeaderboard, 15000);
+        updateLeaderboard();
+    </script>
+</body>
+</html>
