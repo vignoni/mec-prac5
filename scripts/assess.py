@@ -30,7 +30,7 @@ try:
     plt.plot(time, velocity, 'b-', label='Student Velocity', linewidth=2)
     plt.title(f"Latest Submission: {STUDENT_NAME} (RMSE: {rmse:.4f})")
     plt.xlabel("Time (s)")
-    plt.ylabel("Normalized Velocity")
+    plt.ylabel("Velocity")
     plt.legend()
     plt.grid(True)
     
