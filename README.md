@@ -30,11 +30,19 @@ To ensure the automated judge can read your results, your CSV file **must** have
 | :--- | :--- | :--- |
 | **A** | Row Index | Count |
 | **B** | Timestamp | Seconds (s) |
-| **C** | Reference Signal | Normalized (0-100) |
-| **D** | Measured Velocity | Normalized (0-100) |
+| **C** | Reference Signal | rad/s |
+| **D** | Measured Velocity | rad/s |
 
 > [!CAUTION]
-> [cite_start]**Do not change the order of the columns.** The evaluation script relies on these exact positions to calculate your score. [cite: 1, 16]
+> **Do not change the order of the columns.** The evaluation script relies on these exact positions to calculate your score. 
+
+### Example
+| Row | Timestamp | Series 2 | Series 7 |
+| :--- | :--- | :--- | :--- |
+| 0 | 0.397 |  1300 | 0    |  
+| 1 | 0.417 |  1300 | 87   |  
+| 2 | 0.437 |  1300 | 523  |  
+| 3 | 0.457 |  1300 | 785  | 
 
 ---
 
