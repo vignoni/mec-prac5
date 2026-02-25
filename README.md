@@ -1,6 +1,6 @@
 # 🏆 Mobile Robot Control Competition: PID Tuning
 
-Welcome to the **Real-Time Control Systems Leaderboard**. This repository evaluates your robot's velocity control performance using **RMSE (Root Mean Square Error)**. 
+Welcome to the **Real-Time Control Systems Leaderboard**. This repository evaluates your robot's velocity control performance using **RMSE (Root Mean Square Error)** in Practice 5, Mechatronics (11642) - Universitat Politècnica de València.
 
 The goal is to achieve the best tracking of the reference signal with your mobile robot wheel controller.
 
