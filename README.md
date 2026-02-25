@@ -1,17 +1,55 @@
-# EV3 Grading Results
+# 🏆 Mobile Robot Control Competition: PID Tuning
 
-This repo uses GitHub Actions and Python to auto-grade student submissions.
+Welcome to the **Real-Time Control Systems Leaderboard**. This repository evaluates your robot's velocity control performance using **RMSE (Root Mean Square Error)**. 
 
-## Results
+The goal is to achieve the best tracking of the reference signal with your mobile robot wheel controller.
 
-<!-- RESULTS_TABLE_START -->
-| Student | Performance Index | Grade |
-|---------|-------------------|-------|
-| template student | 0.0004 | 9.99 |
-| template student | 6.7057 | 8.00 |
-| template student | 6.7057 | 8.00 |
-| template student | 6.7057 | 8.00 |
+---
 
-### 📈 Latest Submission Plot
-![Latest Result](latest_result.png)
-<!-- RESULTS_TABLE_END -->
+## 📊 Live Leaderboard & Plot
+You can monitor the competition results and the latest submission plot here:
+👉 **[INSERT YOUR GITHUB PAGES URL HERE]**
+
+---
+
+## 🚀 How to Participate
+
+1. **Tune your controller:** Adjust your PID (or other control strategy) parameters on the mobile robot.
+2. **Export your data:** Save your test results into a `.csv` file. 
+   - **Important:** Your file must follow the standard export format (see below).
+3. **Submit the Form:** Upload your file and enter your name in the official submission form:
+   - 🔗 **[INSERT YOUR GOOGLE FORM LINK HERE]**
+
+---
+
+## 📋 CSV Data Format Requirements
+
+To ensure the automated judge can read your results, your CSV file **must** have the following structure (Standard Robot Export):
+
+| Column | Data Description | Units |
+| :--- | :--- | :--- |
+| **A** | Row Index | Count |
+| **B** | Timestamp | Seconds (s) |
+| **C** | Reference Signal | Normalized (0-100) |
+| **D** | Measured Velocity | Normalized (0-100) |
+
+> [!CAUTION]
+> [cite_start]**Do not change the order of the columns.** The evaluation script relies on these exact positions to calculate your score. [cite: 1, 16]
+
+---
+
+## 📉 Evaluation Metric: RMSE
+
+We use the **Root Mean Square Error** to rank your performance. 
+- A **lower RMSE** means better tracking and higher precision.
+- The **Grade** is automatically calculated based on your RMSE (Max: 10.00).
+
+---
+
+## 🛠️ Built With
+- **Python**: Data processing and plotting (Pandas, Numpy, Matplotlib).
+- **GitHub Actions**: Automated CI/CD pipeline for real-time assessment.
+- **Google Forms & Apps Script**: Student submission bridge.
+- **Tailwind CSS**: Live dashboard visualization.
+
+**Good luck and may the best controller win!** 🤖🏎️
