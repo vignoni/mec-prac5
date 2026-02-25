@@ -11,7 +11,10 @@
             <h1 class="text-5xl font-extrabold text-blue-400">Mobile Robot Control Ranking</h1>
             <p class="text-slate-400 mt-4 text-xl">Real-time RMSE Assessment (Lower is Better)</p>
         </header>
-
+<div class="mb-10 bg-slate-800 p-5 rounded-2xl shadow-xl">
+    <h2 class="text-2xl font-bold text-blue-300 mb-4 text-center">Latest Submission Performance</h2>
+    <img id="latest-plot" src="latest_plot.png" alt="Latest Submission Plot" class="w-full rounded-lg border border-slate-600">
+</div>
         <div class="bg-slate-800 rounded-2xl shadow-2xl overflow-hidden">
             <table class="w-full text-left">
                 <thead class="bg-slate-700 text-slate-200">
@@ -28,13 +31,19 @@
         </div>
     </div>
 
-    <script>
+<script>
         async function updateLeaderboard() {
             try {
+                // 1. Fetch the CSV file from the repository
                 const response = await fetch('results.csv');
-                const csvText = await response.text();
-                const rows = csvText.trim().split('\n').slice(1); // Skip CSV header
+                if (!response.ok) throw new Error('CSV not found');
                 
+                const csvText = await response.text();
+                
+                // 2. Parse CSV rows and skip the header
+                const rows = csvText.trim().split('\n').slice(1);
+                
+                // 3. Map data into an array of objects
                 let data = rows.map(row => {
                     const cols = row.split(',');
                     return { 
@@ -42,25 +51,50 @@
                         rmse: parseFloat(cols[1]), 
                         grade: cols[2] 
                     };
-                }).sort((a, b) => a.rmse - b.rmse); // Sort by lowest RMSE first
+                });
 
+                // 4. Sort by lowest RMSE (Best performance first)
+                data.sort((a, b) => a.rmse - b.rmse);
+
+                // 5. Update the Table
                 const container = document.getElementById('leaderboard');
-                container.innerHTML = data.map((item, index) => `
-                    <tr class="${index === 0 ? 'bg-yellow-900/20' : 'border-b border-slate-700'} hover:bg-slate-700/50 transition">
-                        <td class="p-5 font-bold text-2xl">${index === 0 ? '🥇' : index === 1 ? '🥈' : index === 2 ? '🥉' : index + 1}</td>
-                        <td class="p-5 font-semibold text-blue-300 text-lg">${item.name}</td>
-                        <td class="p-5 font-mono text-yellow-400">${item.rmse.toFixed(4)}</td>
-                        <td class="p-5 font-bold text-green-400 text-xl">${item.grade}</td>
-                    </tr>
-                `).join('');
+                container.innerHTML = data.map((item, index) => {
+                    let rankDisplay = index + 1;
+                    let rowClass = "border-b border-slate-700 hover:bg-slate-700/50 transition";
+                    
+                    // Special styling for top 3
+                    if (index === 0) { rankDisplay = '🥇'; rowClass = "bg-yellow-900/20 border-b border-yellow-700"; }
+                    else if (index === 1) { rankDisplay = '🥈'; }
+                    else if (index === 2) { rankDisplay = '🥉'; }
+
+                    return `
+                        <tr class="${rowClass}">
+                            <td class="p-5 font-bold text-2xl text-center">${rankDisplay}</td>
+                            <td class="p-5 font-semibold text-blue-300 text-lg">${item.name}</td>
+                            <td class="p-5 font-mono text-yellow-400">${item.rmse.toFixed(4)}</td>
+                            <td class="p-5 font-bold text-green-400 text-xl">${item.grade}</td>
+                        </tr>
+                    `;
+                }).join('');
+
+                // 6. Force Refresh of the Plot Image (Bypass Cache)
+                const plotImage = document.getElementById('latest-plot');
+                if (plotImage) {
+                    plotImage.src = "latest_plot.png?v=" + new Date().getTime();
+                }
+
+                console.log("Leaderboard and Plot updated successfully.");
+
             } catch (error) {
-                console.error("Error loading leaderboard:", error);
+                console.error("Error updating leaderboard:", error);
             }
         }
-        
-        // Refresh every 15 seconds for a dynamic competition feel
-        setInterval(updateLeaderboard, 15000);
+
+        // Initial load
         updateLeaderboard();
+
+        // Refresh every 20 seconds to show live competition results
+        setInterval(updateLeaderboard, 20000);
     </script>
 </body>
 </html>
