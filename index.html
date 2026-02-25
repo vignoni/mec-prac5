@@ -58,5 +58,70 @@
                     </div>
                 </div>
             </div>
-
         </div>
+
+        <footer class="mt-10 text-center text-slate-500 text-sm">
+            <p>Real-time assessment platform for PID Tuning Competition | DISA - UPV</p>
+        </footer>
+    </div>
+
+    <script>
+        async function updateLeaderboard() {
+            try {
+                // Fetch the CSV adding a timestamp to bypass browser cache
+                const response = await fetch('results.csv?v=' + new Date().getTime());
+                if (!response.ok) throw new Error('results.csv not found');
+                
+                const csvText = await response.text();
+                // Split by lines and remove empty ones, then skip header
+                const rows = csvText.trim().split('\n').filter(row => row.length > 0).slice(1);
+                
+                let data = rows.map(row => {
+                    const cols = row.split(',');
+                    if (cols.length < 3) return null;
+                    return { 
+                        name: cols[0], 
+                        rmse: parseFloat(cols[1]), 
+                        grade: cols[2] 
+                    };
+                }).filter(item => item !== null);
+
+                // Sort by lowest RMSE first
+                data.sort((a, b) => a.rmse - b.rmse);
+
+                const container = document.getElementById('leaderboard');
+                container.innerHTML = data.map((item, index) => {
+                    let rankDisplay = index + 1;
+                    let rowClass = "border-b border-slate-700 hover:bg-slate-700/50 transition";
+                    
+                    if (index === 0) { rankDisplay = '🥇'; rowClass = "bg-yellow-900/10 border-b border-yellow-700/30"; }
+                    else if (index === 1) { rankDisplay = '🥈'; }
+                    else if (index === 2) { rankDisplay = '🥉'; }
+
+                    return `
+                        <tr class="${rowClass}">
+                            <td class="p-4 font-bold text-lg text-center">${rankDisplay}</td>
+                            <td class="p-4 font-medium text-blue-200">${item.name}</td>
+                            <td class="p-4 font-mono text-yellow-500">${item.rmse.toFixed(4)}</td>
+                            <td class="p-4 font-bold text-green-400">${item.grade}</td>
+                        </tr>
+                    `;
+                }).join('');
+
+                // Force image refresh (cache-busting)
+                const plotImage = document.getElementById('latest-plot');
+                if (plotImage) {
+                    plotImage.src = "latest_result.png?v=" + new Date().getTime();
+                }
+
+            } catch (error) {
+                console.error("Error updating dashboard:", error);
+            }
+        }
+
+        // Run immediately and then every 20 seconds
+        updateLeaderboard();
+        setInterval(updateLeaderboard, 20000);
+    </script>
+</body>
+</html>
