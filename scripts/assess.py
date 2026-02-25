@@ -2,37 +2,36 @@ import os
 import pandas as pd
 import numpy as np
 
-# File path for the downloaded student data
-csv_file = "temp_entrega.csv"
-student_name = os.getenv("STUDENT_NAME", "Unknown_Student")
+# Configuration for real-time evaluation
+CSV_FILE = "temp_entrega.csv"
+STUDENT_NAME = os.getenv("STUDENT_NAME", "Anonymous")
 
 try:
-    # Load the CSV. Based on provided samples: 
-    # Col 1: Timestamp, Col 2: Reference, Col 3: Velocity
-    df = pd.read_csv(csv_file)
+    # Read the student CSV file
+    # Expected format: Col 1: Timestamp, Col 2: Reference, Col 3: Velocity
+    df = pd.read_csv(CSV_FILE)
     
-    # Extracting data by index to be robust against header name changes
-    time = df.iloc[:, 1].values
-    # Normalizing values as per existing implementation
+    # Extract data using column indices for robustness
+    # Reference and Velocity are normalized (divided by 100)
     reference = df.iloc[:, 2].values / 100 
     velocity = df.iloc[:, 3].values / 100 
 
-    # --- ITAE CALCULATION ---
-    # Formula: Integral of (time * |error|) dt
-    error = np.abs(reference - velocity)
-    dt = np.diff(time, prepend=time[0])
-    itae = np.sum(time * error * dt)
+    # --- RMSE CALCULATION ---
+    # Formula: sqrt(mean((reference - velocity)^2))
+    mse = np.mean((reference - velocity)**2)
+    rmse = np.sqrt(mse)
 
     # --- GRADING LOGIC ---
-    # Lower ITAE is better. 10 is max grade, penalized by error magnitude.
-    grade = max(0, 10 - (itae * 2)) 
+    # Higher precision (lower RMSE) results in a better grade.
+    # Base grade is 10.0, minus a penalty proportional to the error.
+    grade = max(0, 10 - (rmse * 50)) 
 
-    # Append to the global leaderboard file
+    # Update the central leaderboard file
+    # Format: Student Name, RMSE, Grade
     with open("results.csv", "a") as f:
-        # Format: Name, ITAE, Grade
-        f.write(f"{student_name},{itae:.4f},{grade:.2f}\n")
+        f.write(f"{STUDENT_NAME},{rmse:.4f},{grade:.2f}\n")
 
-    print(f"Success: {student_name} evaluated. ITAE: {itae:.4f}")
+    print(f"Evaluation finished for {STUDENT_NAME}. RMSE: {rmse:.4f}")
 
 except Exception as e:
-    print(f"Error processing submission for {student_name}: {e}")
+    print(f"CRITICAL ERROR during assessment: {e}")
