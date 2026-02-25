@@ -8,7 +8,7 @@ The goal is to achieve the best tracking of the reference signal with your mobil
 
 ## 📊 Live Leaderboard & Plot
 You can monitor the competition results and the latest submission plot here:
-👉 **[INSERT YOUR GITHUB PAGES URL HERE]**
+👉 **[[Competition Results]](https://vignoni.github.io/mec-prac5/)**
 
 ---
 
@@ -18,7 +18,7 @@ You can monitor the competition results and the latest submission plot here:
 2. **Export your data:** Save your test results into a `.csv` file. 
    - **Important:** Your file must follow the standard export format (see below).
 3. **Submit the Form:** Upload your file and enter your name in the official submission form:
-   - 🔗 **[INSERT YOUR GOOGLE FORM LINK HERE]**
+   - 🔗 **[[GOOGLE FORM]](https://forms.gle/jV4DxNbFo26ZXHGg6)**
 
 ---
 
