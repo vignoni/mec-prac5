@@ -1,4 +1,4 @@
-Student,ITAE,Grade
-Gold,2.6162,10.00
-Silver,3.6162,8.50
-Bronce,4.6162,7.00
+Student,ITAE,Grade,RMSE
+Silver,3.6162,10.0,
+Bronce,4.6162,10.0,
+Gold,,10.0,2.6161999237092584
