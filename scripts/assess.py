@@ -1,37 +1,44 @@
 import os
 import pandas as pd
 import numpy as np
+import matplotlib.pyplot as plt
 
-# Configuration for real-time evaluation
+# Configuration
 CSV_FILE = "temp_entrega.csv"
 STUDENT_NAME = os.getenv("STUDENT_NAME", "Anonymous")
 
 try:
-    # Read the student CSV file
-    # Expected format: Col 1: Timestamp, Col 2: Reference, Col 3: Velocity
+    # Load student data
     df = pd.read_csv(CSV_FILE)
     
-    # Extract data using column indices for robustness
-    # Reference and Velocity are normalized (divided by 100)
+    # Extracting data: Col 1=Time, Col 2=Ref, Col 3=Vel
+    time = df.iloc[:, 1].values
     reference = df.iloc[:, 2].values / 100 
     velocity = df.iloc[:, 3].values / 100 
 
-    # --- RMSE CALCULATION ---
-    # Formula: sqrt(mean((reference - velocity)^2))
-    mse = np.mean((reference - velocity)**2)
-    rmse = np.sqrt(mse)
-
-    # --- GRADING LOGIC ---
-    # Higher precision (lower RMSE) results in a better grade.
-    # Base grade is 10.0, minus a penalty proportional to the error.
+    # RMSE Calculation
+    rmse = np.sqrt(np.mean((reference - velocity)**2))
     grade = max(0, 10 - (rmse * 50)) 
 
-    # Update the central leaderboard file
-    # Format: Student Name, RMSE, Grade
+    # Update global results file
     with open("results.csv", "a") as f:
         f.write(f"{STUDENT_NAME},{rmse:.4f},{grade:.2f}\n")
 
-    print(f"Evaluation finished for {STUDENT_NAME}. RMSE: {rmse:.4f}")
+    # --- GENERATE PLOT ---
+    plt.figure(figsize=(10, 5))
+    plt.plot(time, reference, 'r--', label='Reference', linewidth=2)
+    plt.plot(time, velocity, 'b-', label='Student Velocity', linewidth=2)
+    plt.title(f"Latest Submission: {STUDENT_NAME} (RMSE: {rmse:.4f})")
+    plt.xlabel("Time (s)")
+    plt.ylabel("Normalized Velocity")
+    plt.legend()
+    plt.grid(True)
+    
+    # Save as fixed filename for the web display
+    plt.savefig("latest_plot.png")
+    plt.close()
+
+    print(f"Success: Result and plot updated for {STUDENT_NAME}")
 
 except Exception as e:
-    print(f"CRITICAL ERROR during assessment: {e}")
+    print(f"Error: {e}")
