@@ -35,7 +35,7 @@ try:
     plt.grid(True)
     
     # Save as fixed filename for the web display
-    plt.savefig("latest_plot.png")
+    plt.savefig("latest_result.png")
     plt.close()
 
     print(f"Success: Result and plot updated for {STUDENT_NAME}")
