@@ -16,13 +16,13 @@ jobs:
           python-version: '3.9'
       
       - name: Install Dependencies
-        # Aquí añadimos matplotlib para que no de error
         run: pip install pandas numpy matplotlib
 
       - name: Download Student Data
         run: |
+          # We use a more robust download link for Google Drive raw files
           FILE_ID="${{ github.event.client_payload.file_id }}"
-          curl -L "https://docs.google.com/uc?export=download&id=$FILE_ID" -o temp_entrega.csv
+          curl -L "https://drive.google.com/uc?export=download&id=${FILE_ID}" -o temp_entrega.csv
 
       - name: Run Assessment Script
         env:
@@ -33,6 +33,10 @@ jobs:
         run: |
           git config --global user.name "MecatronicsBot"
           git config --global user.email "bot@mecatronics.edu"
-          git add results.csv latest_plot.png
+          git add results.csv
+          # We only add the plot if the file was actually created
+          if [ -f latest_result.png ]; then
+            git add latest_result.png
+          fi
           git commit -m "New result: ${{ github.event.client_payload.student_name }}"
           git push
