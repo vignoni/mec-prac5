@@ -17,8 +17,7 @@ You can monitor the competition results and the latest submission plot here:
 1. **Tune your controller:** Adjust your PID (or other control strategy) parameters on the mobile robot.
 2. **Export your data:** Save your test results into a `.csv` file. 
    - **Important:** Your file must follow the standard export format (see below).
-3. **Submit the Form:** Upload your file and enter your name in the official submission form:
-   - 🔗 **[[GOOGLE FORM]](https://forms.gle/jV4DxNbFo26ZXHGg6)**
+3. **Submit the Form:** Upload your file and enter your name in the official submission form: SUBMISSION CLOSED
 
 ---
 
