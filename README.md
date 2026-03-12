@@ -14,9 +14,9 @@ You can monitor the competition results and the latest submission plot here:
 
 ## 🚀 How to Participate
 
-1. **Tune your controller:** Adjust your PID (or other control strategy) parameters on the mobile robot.
-2. **Export your data:** Save your test results into a `.csv` file. 
-   - **Important:** Your file must follow the standard export format (see below).
+1. **Tune your controller:** Adjust your strategy and parameters on the mobile robot and run the trajectory.
+2. **Upload your data from the robot:** Save your test results into a `.txt` file. 
+   - **Important:** Your file must follow the standard export format (already made by the robot).
 3. **Submit the Form:** Upload your file and enter your name in the official submission form: [[GOOGLE FORM]](https://forms.gle/TT6iaXa9LxJQQUvA9)
 
 ---
@@ -31,6 +31,7 @@ To ensure the automated judge can read your results, your CSV file **must** have
 | **B** | Reference trajectory Y | cm |
 | **C** | Real trajectory X | cm |
 | **D** | Real trajectory Y | cm |
+| **E** | RMS Error | cm |
 
 > [!CAUTION]
 > **Do not change the order of the columns.** The evaluation script relies on these exact positions to calculate your score. 
