@@ -1,8 +1,8 @@
-# 🏆 Mobile Robot Control Competition: PID Tuning
+# 🏆 Mobile Robot Control Competition: Trajectory tracking
 
-Welcome to the **Real-Time Control Systems Leaderboard**. This repository evaluates your robot's velocity control performance using **RMSE (Root Mean Square Error)** in Practice 5, Mechatronics (11642) - Universitat Politècnica de València.
+Welcome to the **Real-Time Trajectory tracking Leaderboard**. This repository evaluates your trajectory performance using **RMSE (Root Mean Square Error)** in Practice 6, Mechatronics (11642) - Universitat Politècnica de València.
 
-The goal is to achieve the best tracking of the reference signal with your mobile robot wheel controller.
+The goal is to achieve the best trayectory tracking with your mobile robot..
 
 ---
 
@@ -17,7 +17,7 @@ You can monitor the competition results and the latest submission plot here:
 1. **Tune your controller:** Adjust your PID (or other control strategy) parameters on the mobile robot.
 2. **Export your data:** Save your test results into a `.csv` file. 
    - **Important:** Your file must follow the standard export format (see below).
-3. **Submit the Form:** Upload your file and enter your name in the official submission form: SUBMISSION CLOSED
+3. **Submit the Form:** Upload your file and enter your name in the official submission form: [[GOOGLE FORM]](https://forms.gle/TT6iaXa9LxJQQUvA9)
 
 ---
 
@@ -27,22 +27,14 @@ To ensure the automated judge can read your results, your CSV file **must** have
 
 | Column | Data Description | Units |
 | :--- | :--- | :--- |
-| **A** | Row Index | Count |
-| **B** | Timestamp | Seconds (s) |
-| **C** | Reference Signal | rad/s |
-| **D** | Measured Velocity | rad/s |
+| **A** | Reference trajectory X | cm |
+| **B** | Reference trajectory Y | cm |
+| **C** | Real trajectory X | cm |
+| **D** | Real trajectory Y | cm |
 
 > [!CAUTION]
 > **Do not change the order of the columns.** The evaluation script relies on these exact positions to calculate your score. 
 
-### Example
-| Row, | Timestamp, | Series 2, | Series 7 |
-| :--- | :--- | :--- | :--- |
-| 0, | 0.397, |  1300, | 0    |  
-| 1, | 0.417, |  1300, | 87   |  
-| 2, | 0.437, |  1300, | 523  |  
-| 3, | 0.457, |  1300, | 785  | 
-|...|...|...|...|
 
 ---
 
